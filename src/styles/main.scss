@@ -1,0 +1,84 @@
+$font-color: #ffffff;
+
+.card {
+  position: relative;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  //border: 1px solid red;
+}
+
+.card-item {
+  position: relative;
+  box-sizing: border-box;
+  width: 5 * 86px;
+  height: 5 * 54px;
+  border-radius: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 8rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-align: center;
+  color: white;
+  z-index: 2;
+  background: url("../assets/images/background.jpg");
+  background-size: cover;
+
+  &__number {
+    position: relative;
+    display: block;
+    font-size: 2rem;
+    padding: 0.5rem;
+  }
+
+  &__holder-wrapper {
+    position: absolute;
+    box-sizing: border-box;
+    text-align: left;
+    width: 70%;
+    bottom: 1rem;
+    left: 1rem;
+    padding: 0.3rem;
+    padding-left: 0.5rem;
+  }
+
+  &__expires-wrapper {
+    position: absolute;
+    box-sizing: border-box;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.3rem 0.5rem 0.3rem 0.5rem;
+    border: 1px solid green;
+  }
+
+  &__field-caption {
+    font-size: 1rem;
+  }
+
+  &__holder {
+    padding-top: 0.2rem;
+    font-size: 1.2rem;
+  }
+
+  &__expires {
+    padding-top: 0.2rem;
+    font-size: 1.2rem;
+  }
+}
+
+.card-form {
+  position: relative;
+  margin-top: -5 * 27px;
+  padding-top: 5 * 27px;
+  border: 1px solid green;
+  width: 100%;
+  height: 500px;
+  border-radius: 15px;
+}
+
+.selected {
+  border: 2px solid $font-color;
+  border-radius: 3px;
+ 
+}
