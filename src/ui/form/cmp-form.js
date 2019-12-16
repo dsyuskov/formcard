@@ -13,12 +13,12 @@ export default class FormCard extends React.Component {
             #### #### #### ####
           </label>
           <label for="card-holder" className="card-item__holder-wrapper selected">
-            <div className="card-item__field-caption">Card Holder</div>
-            <div className="card-item__holder">FULL NAME</div>
+            <span className="card-item__field-caption">Card Holder</span>
+            <span className="card-item__holder">FULL NAME</span>
           </label>
           <label for="card-expires" className="card-item__expires-wrapper selected">
-            <div className="card-item__field-caption">Expires</div>
-            <div className="card-item__expires">MM/YY</div>
+            <span className="card-item__field-caption">Expires</span>
+            <span className="card-item__expires">MM/YY</span>
           </label>
         </div>
 
