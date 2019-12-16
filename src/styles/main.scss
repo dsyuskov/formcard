@@ -152,6 +152,6 @@ body{
 }
 
 .selected {
-  border: 2px solid $font-color;
+  box-shadow: 0 0 0px 2px $font-color;
   border-radius: $input-readius;
 }

@@ -2,67 +2,156 @@ import React from 'react';
 import '../../styles/main.scss';
 
 export default class FormCard extends React.Component {
+  constructor() {
+    super();
+    this.handleCardNumber = this.handleCardNumber.bind(this);
+    this.handleCardHolder = this.handleCardHolder.bind(this);
+    this.handleCardExpiresMonth = this.handleCardExpiresMonth.bind(this);
+    this.handleCardExpiresYear = this.handleCardExpiresYear.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
+  }
+  state = {
+    cardNumber: "################",
+    cardHolder: 'FULL NAME',
+    cardExpiresMonth: 'MM',
+    cardExpiresYear: 'YY',
+    selected: ''
+  }
+
+  handleFocus(element) {
+    this.setState({selected: element})
+  }
+
+  handleCardNumber(event) {
+    // let newCardNumber = this.state.cardNumber;
+    // newCardNumber
+    // console.log(event.target.value);
+  }
+
+  handleCardHolder(event) {
+    let onlyLetter = new RegExp("^([A-z ])+$"); // need change
+    let newCardHolder = event.target.value.toUpperCase();
+    if (!newCardHolder.length) {
+      newCardHolder = 'FULL NAME';
+    }
+    if (onlyLetter.test(newCardHolder[newCardHolder.length-1])) {
+      this.setState({ cardHolder: newCardHolder });
+    }
+  }
+
+  handleCardExpiresMonth(event) {
+    let newCardExpiresMonth = event.target.value;
+    this.setState({ cardExpiresMonth: newCardExpiresMonth });
+  }
+
+  handleCardExpiresYear(event) {
+    let newCardExpiresYear = event.target.value;
+    this.setState({ cardExpiresYear: newCardExpiresYear });
+  }
+
   render() {
+    const { cardHolder, selected, cardExpiresMonth, cardExpiresYear } = this.state;
     return (
       <div className="card">
         <div className="card-item">
           <label 
-            for="card-number" 
-            className="card-item__number selected"
+            htmlFor = "card-number" 
+            className = {`card-item__number ${this.state.selected === 'cardNumber' ? 'selected' : ''}`}
+          >{ this.state.cardNumber }
+          </label>
+          <label
+            htmlFor="card-holder"
+            className = {`card-item__holder-wrapper ${this.state.selected === 'cardHolder' ? 'selected' : ''}`}
           >
-            #### #### #### ####
-          </label>
-          <label for="card-holder" className="card-item__holder-wrapper selected">
             <span className="card-item__field-caption">Card Holder</span>
-            <span className="card-item__holder">FULL NAME</span>
+            <span className="card-item__holder">{ cardHolder }</span>
           </label>
-          <label for="card-expires" className="card-item__expires-wrapper selected">
-            <span className="card-item__field-caption">Expires</span>
-            <span className="card-item__expires">MM/YY</span>
-          </label>
+          <div 
+            className = {`card-item__expires-wrapper ${selected === 'cardExpires' ? 'selected' : ''}`}
+          >
+            <label htmlFor="card-expires-month">
+              <span className="card-item__field-caption">Expires</span>
+            </label>
+            <label htmlFor="card-expires-month">
+              <span className="card-item__expires">{ cardExpiresMonth }</span>
+            </label>
+            <span>/</span>
+            <label htmlFor="card-expires-year">
+              <span className="card-item__expires">{ cardExpiresYear }</span>
+            </label>
+          </div>
         </div>
 
         <div className="card-form">
           <div className="card-form__number card-form__row">
             <label className="card-form__caption">Card Number</label>
-            <input type="text" id="card-number" className="card-form__input"></input>
+            <input
+              type = "text"
+              id = "card-number"
+              className = "card-form__input"
+              onChange = { this.handleCardNumber }
+              onFocus = { () => this.handleFocus('cardNumber') }
+              onBlur =  { () => this.handleFocus('') }
+            />
           </div>
           <div className="card-form__holder card-form__row">
             <label className="card-form__caption">Card Holders</label>
-            <input type="text" id="card-holder" className="card-form__input"></input>
+            <input
+              type = "text"
+              id = "card-holder"
+              className = "card-form__input"
+              onChange = { this.handleCardHolder }
+              onFocus = { () => this.handleFocus('cardHolder') }
+              onBlur =  { () => this.handleFocus('') }
+              value = { cardHolder === 'FULL NAME' ? '' : cardHolder }
+            />
           </div>
           <div className="card-form__end-row card-form__row">
-            <div className="card-form__expires">
+            <div
+              className="card-form__expires"
+              onFocus = { () => this.handleFocus('cardExpires') }
+              onBlur =  { () => this.handleFocus('') }
+            >
               <label className="card-form__caption">Expires Date</label>
-              <div className="card-form__expires-container">
-                <select id="card-expires-month" className="card-form__input card-form__select">
-                  <option value="" disabled="disabled" selected="selected">Month</option>
-                  <option value="1">01</option>
-                  <option value="2">02</option>
-                  <option value="3">03</option>
-                  <option value="4">04</option>
-                  <option value="5">05</option>
-                  <option value="6">06</option>
-                  <option value="7">07</option>
-                  <option value="8">08</option>
-                  <option value="9">09</option>
+              <div className="card-form__expires-container" id="card-expires">
+                <select
+                  id = "card-expires-month"
+                  className = "card-form__input card-form__select"
+                  onChange = { this.handleCardExpiresMonth }
+                  value = { cardExpiresMonth }
+                >
+                  <option value="MM" disabled="disabled" selected="selected">Month</option>
+                  <option value="01">01</option>
+                  <option value="02">02</option>
+                  <option value="03">03</option>
+                  <option value="04">04</option>
+                  <option value="05">05</option>
+                  <option value="06">06</option>
+                  <option value="07">07</option>
+                  <option value="08">08</option>
+                  <option value="09">09</option>
                   <option value="10">10</option>
                   <option value="11">11</option>
                   <option value="12">12</option>
                 </select>
-                <select id="card-expires-year" className="card-form__input card-form__select">
-                    <option value="" disabled="disabled" selected="selected">Year</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                    <option value="2028">2028</option>
-                    <option value="2029">2029</option>
-                    <option value="2030">2030</option>
+                <select 
+                  id = "card-expires-year"
+                  className = "card-form__input card-form__select"
+                  onChange = { this.handleCardExpiresYear }
+                  value = { cardExpiresYear }
+                  >
+                    <option value="YY" disabled="disabled" selected="selected">Year</option>
+                    <option value="20">2020</option>
+                    <option value="21">2021</option>
+                    <option value="22">2022</option>
+                    <option value="23">2023</option>
+                    <option value="24">2024</option>
+                    <option value="25">2025</option>
+                    <option value="26">2026</option>
+                    <option value="27">2027</option>
+                    <option value="28">2028</option>
+                    <option value="29">2029</option>
+                    <option value="30">2030</option>
                   </select>
               </div>
             </div>
