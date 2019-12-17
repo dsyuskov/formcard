@@ -9,6 +9,7 @@ export default class FormCard extends React.Component {
     this.handleCardExpiresMonth = this.handleCardExpiresMonth.bind(this);
     this.handleCardExpiresYear = this.handleCardExpiresYear.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
+    this.handleFocusCVV = this.handleFocusCVV.bind(this);
   }
   state = {
     cardNumberItem: '#### #### #### ####',
@@ -16,11 +17,16 @@ export default class FormCard extends React.Component {
     cardHolder: 'FULL NAME',
     cardExpiresMonth: 'MM',
     cardExpiresYear: 'YY',
-    selected: ''
+    selected: '',
+    isFront: true,
   }
 
   handleFocus(element) {
     this.setState({selected: element})
+  }
+
+  handleFocusCVV() {
+    this.setState({isFront: !this.state.isFront})
   }
 
   handleCardNumber(event) {
@@ -81,11 +87,13 @@ export default class FormCard extends React.Component {
   }
 
   render() {
-    const { cardNumberForm, cardNumberItem, cardHolder, selected, cardExpiresMonth, cardExpiresYear } = this.state;
+    const { cardNumberForm, cardNumberItem, cardHolder, selected, cardExpiresMonth, cardExpiresYear, isFront } = this.state;
     return (
       <div className="card">
         <div className="card-item">
-          <div className="card_item__front">
+          <div 
+            className = {`card-item__front ${ isFront ? 'visible' : ''}`}
+          >
             <label
               htmlFor = "card-number" 
               className = {`card-item__number ${ selected === 'cardNumber' ? 'selected' : '' }`}
@@ -113,8 +121,10 @@ export default class FormCard extends React.Component {
               </label>
             </div>
           </div>
-          <div className="card_item__back">
-
+          <div
+            className = { `card-item__back ${ isFront ? '' : 'visible' }`}
+          >
+            <h2>It is a back</h2>
           </div>
         </div>
 
@@ -194,7 +204,13 @@ export default class FormCard extends React.Component {
             </div>
             <div className="card-form__cvv">
               <label className="card-form__caption">CVV</label>
-              <input type="text" id="card-cvv" className="card-form__input"></input>
+              <input 
+                type = "text"
+                id = "card-cvv"
+                className = "card-form__input"
+                onFocus = { this.handleFocusCVV }
+                onBlur =  { this.handleFocusCVV }
+              />
             </div>
           </div>
           <input type="button" className="card-form__button" value="Submit"></input>
