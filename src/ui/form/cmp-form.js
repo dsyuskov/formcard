@@ -11,7 +11,8 @@ export default class FormCard extends React.Component {
     this.handleFocus = this.handleFocus.bind(this);
   }
   state = {
-    cardNumber: "################",
+    cardNumberItem: '#### #### #### ####',
+    cardNumberForm: '',
     cardHolder: 'FULL NAME',
     cardExpiresMonth: 'MM',
     cardExpiresYear: 'YY',
@@ -23,18 +24,48 @@ export default class FormCard extends React.Component {
   }
 
   handleCardNumber(event) {
-    // let newCardNumber = this.state.cardNumber;
-    // newCardNumber
-    // console.log(event.target.value);
+    let onlyNumber = new RegExp("^([0-9])*$");
+    let cardNumberForm = event.target.value.split(' ').join('');
+    let newCardNumberForm = '';
+    let newCardNumberItem = '';
+
+    if (!onlyNumber.test(cardNumberForm)) {
+      return;
+    }
+
+    if (cardNumberForm.length > 16) {
+      return;
+    }
+
+    for (let i = 0; i < 16; i++) {
+      
+      if (i < cardNumberForm.length) {
+        newCardNumberForm += cardNumberForm[i];
+        newCardNumberItem += cardNumberForm[i];
+
+        if (i === 3 || i === 7 || i === 11 ) {
+          if (i !== cardNumberForm.length - 1) {
+            newCardNumberForm = newCardNumberForm + ' ';
+          }
+          newCardNumberItem = newCardNumberItem + ' ';
+        }
+      } else {
+        newCardNumberItem = newCardNumberItem + '#';
+        if (i === 3 || i === 7 || i === 11 ) {
+          newCardNumberItem = newCardNumberItem + ' ';
+        }
+      }
+    }
+    this.setState({ cardNumberForm: newCardNumberForm, cardNumberItem: newCardNumberItem });
   }
 
   handleCardHolder(event) {
-    let onlyLetter = new RegExp("^([A-z ])+$"); // need change
+    let onlyLetter = new RegExp("^([A-z ])+$"); 
     let newCardHolder = event.target.value.toUpperCase();
     if (!newCardHolder.length) {
       newCardHolder = 'FULL NAME';
     }
-    if (onlyLetter.test(newCardHolder[newCardHolder.length-1])) {
+    if (onlyLetter.test(newCardHolder)) {
       this.setState({ cardHolder: newCardHolder });
     }
   }
@@ -50,35 +81,40 @@ export default class FormCard extends React.Component {
   }
 
   render() {
-    const { cardHolder, selected, cardExpiresMonth, cardExpiresYear } = this.state;
+    const { cardNumberForm, cardNumberItem, cardHolder, selected, cardExpiresMonth, cardExpiresYear } = this.state;
     return (
       <div className="card">
         <div className="card-item">
-          <label 
-            htmlFor = "card-number" 
-            className = {`card-item__number ${this.state.selected === 'cardNumber' ? 'selected' : ''}`}
-          >{ this.state.cardNumber }
-          </label>
-          <label
-            htmlFor="card-holder"
-            className = {`card-item__holder-wrapper ${this.state.selected === 'cardHolder' ? 'selected' : ''}`}
-          >
-            <span className="card-item__field-caption">Card Holder</span>
-            <span className="card-item__holder">{ cardHolder }</span>
-          </label>
-          <div 
-            className = {`card-item__expires-wrapper ${selected === 'cardExpires' ? 'selected' : ''}`}
-          >
-            <label htmlFor="card-expires-month">
-              <span className="card-item__field-caption">Expires</span>
+          <div className="card_item__front">
+            <label
+              htmlFor = "card-number" 
+              className = {`card-item__number ${ selected === 'cardNumber' ? 'selected' : '' }`}
+            >{ cardNumberItem }
             </label>
-            <label htmlFor="card-expires-month">
-              <span className="card-item__expires">{ cardExpiresMonth }</span>
+            <label
+              htmlFor="card-holder"
+              className = {`card-item__holder-wrapper ${ selected === 'cardHolder' ? 'selected' : '' }`}
+            >
+              <span className="card-item__field-caption">Card Holder</span>
+              <span className="card-item__holder">{ cardHolder }</span>
             </label>
-            <span>/</span>
-            <label htmlFor="card-expires-year">
-              <span className="card-item__expires">{ cardExpiresYear }</span>
-            </label>
+            <div 
+              className = {`card-item__expires-wrapper ${ selected === 'cardExpires' ? 'selected' : '' }`}
+            >
+              <label htmlFor="card-expires-month">
+                <span className="card-item__field-caption">Expires</span>
+              </label>
+              <label htmlFor="card-expires-month">
+                <span className="card-item__expires">{ cardExpiresMonth }</span>
+              </label>
+              <span>/</span>
+              <label htmlFor="card-expires-year">
+                <span className="card-item__expires">{ cardExpiresYear }</span>
+              </label>
+            </div>
+          </div>
+          <div className="card_item__back">
+
           </div>
         </div>
 
@@ -92,6 +128,7 @@ export default class FormCard extends React.Component {
               onChange = { this.handleCardNumber }
               onFocus = { () => this.handleFocus('cardNumber') }
               onBlur =  { () => this.handleFocus('') }
+              value = { cardNumberForm }
             />
           </div>
           <div className="card-form__holder card-form__row">
