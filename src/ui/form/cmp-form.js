@@ -10,6 +10,8 @@ export default class FormCard extends React.Component {
     this.handleCardExpiresYear = this.handleCardExpiresYear.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
     this.handleFocusCVV = this.handleFocusCVV.bind(this);
+    this.handleCardCVV = this.handleCardCVV.bind(this);
+    
   }
   state = {
     cardNumberItem: '#### #### #### ####',
@@ -17,8 +19,9 @@ export default class FormCard extends React.Component {
     cardHolder: 'FULL NAME',
     cardExpiresMonth: 'MM',
     cardExpiresYear: 'YY',
-    selected: '',
+    cardCVV: '',
     isFront: true,
+    selected: '',
   }
 
   handleFocus(element) {
@@ -86,14 +89,27 @@ export default class FormCard extends React.Component {
     this.setState({ cardExpiresYear: newCardExpiresYear });
   }
 
+  handleCardCVV(event) {
+    let onlyNumber = new RegExp("^([0-9])*$");
+    let cardCVV = event.target.value;
+    let newCardCVV = '';
+
+    if (!onlyNumber.test(cardCVV) || cardCVV.length > 3) {
+      return;
+    }
+
+    newCardCVV = cardCVV;
+
+    this.setState({cardCVV: newCardCVV});
+  }
+
   render() {
-    const { cardNumberForm, cardNumberItem, cardHolder, selected, cardExpiresMonth, cardExpiresYear, isFront } = this.state;
+    const { cardNumberForm, cardNumberItem, cardHolder, cardCVV,
+      selected, cardExpiresMonth, cardExpiresYear, isFront } = this.state;
     return (
       <div className="card">
-        <div className="card-item">
-          <div 
-            className = {`card-item__front ${ isFront ? 'visible' : ''}`}
-          >
+        <div className={`card-item ${isFront ? '' : 'rotate'}`}>
+          <div className="card-item__front">
             <label
               htmlFor = "card-number" 
               className = {`card-item__number ${ selected === 'cardNumber' ? 'selected' : '' }`}
@@ -121,10 +137,11 @@ export default class FormCard extends React.Component {
               </label>
             </div>
           </div>
-          <div
-            className = { `card-item__back ${ isFront ? '' : 'visible' }`}
-          >
-            <h2>It is a back</h2>
+          <div className = "card-item__back">
+            <div className="card-item__magnet"></div>
+            <div className="card-item__cvv">{ cardCVV }
+
+            </div>
           </div>
         </div>
 
@@ -210,6 +227,8 @@ export default class FormCard extends React.Component {
                 className = "card-form__input"
                 onFocus = { this.handleFocusCVV }
                 onBlur =  { this.handleFocusCVV }
+                onChange = { this.handleCardCVV }
+                value = { cardCVV }
               />
             </div>
           </div>
